@@ -1,0 +1,767 @@
+# config file for ansible -- https://ansible.com/
+# ===============================================
+
+# nearly all parameters can be overridden in ansible-playbook
+# or with command line flags. ansible will read ANSIBLE_CONFIG,
+# ansible.cfg in the current working directory, .ansible.cfg in
+# the home directory or /etc/ansible/ansible.cfg, whichever it
+# finds first
+
+[defaults]
+
+# some basic default values...
+
+#inventory      = /etc/ansible/hosts
+#library        = /usr/share/my_modules/
+#module_utils   = /usr/share/my_module_utils/
+#remote_tmp     = ~/.ansible/tmp
+#local_tmp      = ~/.ansible/tmp
+#plugin_filters_cfg = /etc/ansible/plugin_filters.yml
+#forks          = 5
+#poll_interval  = 15
+#sudo_user      = root
+#ask_sudo_pass = True
+#ask_pass      = True
+#transport      = smart
+#remote_port    = 22
+#module_lang    = C
+#module_set_locale = False
+
+# plays will gather facts by default, which contain information about
+# the remote system.
+#
+# smart - gather by default, but don't regather if already gathered
+# implicit - gather by default, turn off with gather_facts: False
+# explicit - do not gather by default, must say gather_facts: True
+#gathering = implicit
+
+# This only affects the gathering done by a play's gather_facts directive,
+# by default gathering retrieves all facts subsets
+# all - gather all subsets
+# network - gather min and network facts
+# hardware - gather hardware facts (longest facts to retrieve)
+# virtual - gather min and virtual facts
+# facter - import facts from facter
+# ohai - import facts from ohai
+# You can combine them using comma (ex: network,virtual)
+# You can negate them using ! (ex: !hardware,!facter,!ohai)
+# A minimal set of facts is always gathered.
+#gather_subset = all
+
+# some hardware related facts are collected
+# with a maximum timeout of 10 seconds. This
+# option lets you increase or decrease that
+# timeout to something more suitable for the
+# environment.
+# gather_timeout = 10
+
+# additional paths to search for roles in, colon separated
+roles_path    = /etc/ansible/roles:/usr/share/ansible/roles
+
+# uncomment this to disable SSH key host checking
+#host_key_checking = False
+
+# change the default callback, you can only have one 'stdout' type  enabled at a time.
+#stdout_callback = skippy
+
+
+## Ansible ships with some plugins that require whitelisting,
+## this is done to avoid running all of a type by default.
+## These setting lists those that you want enabled for your system.
+## Custom plugins should not need this unless plugin author specifies it.
+
+# enable callback plugins, they can output to stdout but cannot be 'stdout' type.
+#callback_whitelist = timer, mail
+
+# Determine whether includes in tasks and handlers are "static" by
+# default. As of 2.0, includes are dynamic by default. Setting these
+# values to True will make includes behave more like they did in the
+# 1.x versions.
+#task_includes_static = False
+#handler_includes_static = False
+
+# Controls if a missing handler for a notification event is an error or a warning
+#error_on_missing_handler = True
+
+# change this for alternative sudo implementations
+#sudo_exe = sudo
+
+# What flags to pass to sudo
+# WARNING: leaving out the defaults might create unexpected behaviours
+#sudo_flags = -H -S -n
+
+# SSH timeout
+#timeout = 10
+
+# default user to use for playbooks if user is not specified
+# (/usr/bin/ansible will use current user as default)
+#remote_user = root
+
+# logging is off by default unless this path is defined
+# if so defined, consider logrotate
+#log_path = /var/log/ansible.log
+
+# default module name for /usr/bin/ansible
+#module_name = command
+
+# use this shell for commands executed under sudo
+# you may need to change this to bin/bash in rare instances
+# if sudo is constrained
+#executable = /bin/sh
+
+# if inventory variables overlap, does the higher precedence one win
+# or are hash values merged together?  The default is 'replace' but
+# this can also be set to 'merge'.
+#hash_behaviour = replace
+
+# by default, variables from roles will be visible in the global variable
+# scope. To prevent this, the following option can be enabled, and only
+# tasks and handlers within the role will see the variables there
+#private_role_vars = yes
+
+# list any Jinja2 extensions to enable here:
+#jinja2_extensions = jinja2.ext.do,jinja2.ext.i18n
+
+# if set, always use this private key file for authentication, same as
+# if passing --private-key to ansible or ansible-playbook
+#private_key_file = /path/to/file
+
+# If set, configures the path to the Vault password file as an alternative to
+# specifying --vault-password-file on the command line.
+#vault_password_file = /path/to/vault_password_file
+
+# format of string {{ ansible_managed }} available within Jinja2
+# templates indicates to users editing templates files will be replaced.
+# replacing {file}, {host} and {uid} and strftime codes with proper values.
+#ansible_managed = Ansible managed: {file} modified on %Y-%m-%d %H:%M:%S by {uid} on {host}
+# {file}, {host}, {uid}, and the timestamp can all interfere with idempotence
+# in some situations so the default is a static string:
+#ansible_managed = Ansible managed
+
+# by default, ansible-playbook will display "Skipping [host]" if it determines a task
+# should not be run on a host.  Set this to "False" if you don't want to see these "Skipping"
+# messages. NOTE: the task header will still be shown regardless of whether or not the
+# task is skipped.
+#display_skipped_hosts = True
+
+# by default, if a task in a playbook does not include a name: field then
+# ansible-playbook will construct a header that includes the task's action but
+# not the task's args.  This is a security feature because ansible cannot know
+# if the *module* considers an argument to be no_log at the time that the
+# header is printed.  If your environment doesn't have a problem securing
+# stdout from ansible-playbook (or you have manually specified no_log in your
+# playbook on all of the tasks where you have secret information) then you can
+# safely set this to True to get more informative messages.
+#display_args_to_stdout = False
+
+# by default (as of 1.3), Ansible will raise errors when attempting to dereference
+# Jinja2 variables that are not set in templates or action lines. Uncomment this line
+# to revert the behavior to pre-1.3.
+#error_on_undefined_vars = False
+
+# by default (as of 1.6), Ansible may display warnings based on the configuration of the
+# system running ansible itself. This may include warnings about 3rd party packages or
+# other conditions that should be resolved if possible.
+# to disable these warnings, set the following value to False:
+#system_warnings = True
+
+# by default (as of 1.4), Ansible may display deprecation warnings for language
+# features that should no longer be used and will be removed in future versions.
+# to disable these warnings, set the following value to False:
+#deprecation_warnings = True
+
+# (as of 1.8), Ansible can optionally warn when usage of the shell and
+# command module appear to be simplified by using a default Ansible module
+# instead.  These warnings can be silenced by adjusting the following
+# setting or adding warn=yes or warn=no to the end of the command line
+# parameter string.  This will for example suggest using the git module
+# instead of shelling out to the git command.
+# command_warnings = False
+
+
+# set plugin path directories here, separate with colons
+#action_plugins     = /usr/share/ansible/plugins/action
+#cache_plugins      = /usr/share/ansible/plugins/cache
+#callback_plugins   = /usr/share/ansible/plugins/callback
+#connection_plugins = /usr/share/ansible/plugins/connection
+#lookup_plugins     = /usr/share/ansible/plugins/lookup
+#inventory_plugins  = /usr/share/ansible/plugins/inventory
+#vars_plugins       = /usr/share/ansible/plugins/vars
+#filter_plugins     = /usr/share/ansible/plugins/filter
+#test_plugins       = /usr/share/ansible/plugins/test
+#terminal_plugins   = /usr/share/ansible/plugins/terminal
+#strategy_plugins   = /usr/share/ansible/plugins/strategy
+
+
+# by default, ansible will use the 'linear' strategy but you may want to try
+# another one
+#strategy = free
+
+# by default callbacks are not loaded for /bin/ansible, enable this if you
+# want, for example, a notification or logging callback to also apply to
+# /bin/ansible runs
+#bin_ansible_callbacks = False
+
+
+# don't like cows?  that's unfortunate.
+# set to 1 if you don't want cowsay support or export ANSIBLE_NOCOWS=1
+#nocows = 1
+
+# set which cowsay stencil you'd like to use by default. When set to 'random',
+# a random stencil will be selected for each task. The selection will be filtered
+# against the `cow_whitelist` option below.
+#cow_selection = default
+#cow_selection = random
+
+# when using the 'random' option for cowsay, stencils will be restricted to this list.
+# it should be formatted as a comma-separated list with no spaces between names.
+# NOTE: line continuations here are for formatting purposes only, as the INI parser
+#       in python does not support them.
+#cow_whitelist=bud-frogs,bunny,cheese,daemon,default,dragon,elephant-in-snake,elephant,eyes,\
+#              hellokitty,kitty,luke-koala,meow,milk,moofasa,moose,ren,sheep,small,stegosaurus,\
+#              stimpy,supermilker,three-eyes,turkey,turtle,tux,udder,vader-koala,vader,www
+
+# don't like colors either?
+# set to 1 if you don't want colors, or export ANSIBLE_NOCOLOR=1
+#nocolor = 1
+
+# if set to a persistent type (not 'memory', for example 'redis') fact values
+# from previous runs in Ansible will be stored.  This may be useful when
+# wanting to use, for example, IP information from one group of servers
+# without having to talk to them in the same playbook run to get their
+# current IP information.
+#fact_caching = memory
+
+
+# retry files
+# When a playbook fails by default a .retry file will be created in ~/
+# You can disable this feature by setting retry_files_enabled to False
+# and you can change the location of the files by setting retry_files_save_path
+
+#retry_files_enabled = False
+#retry_files_save_path = ~/.ansible-retry
+
+# squash actions
+# Ansible can optimise actions that call modules with list parameters
+# when looping. Instead of calling the module once per with_ item, the
+# module is called once with all items at once. Currently this only works
+# under limited circumstances, and only with parameters named 'name'.
+#squash_actions = apk,apt,dnf,homebrew,pacman,pkgng,yum,zypper
+
+# prevents logging of task data, off by default
+#no_log = False
+
+# prevents logging of tasks, but only on the targets, data is still logged on the master/controller
+#no_target_syslog = False
+
+# controls whether Ansible will raise an error or warning if a task has no
+# choice but to create world readable temporary files to execute a module on
+# the remote machine.  This option is False by default for security.  Users may
+# turn this on to have behaviour more like Ansible prior to 2.1.x.  See
+# https://docs.ansible.com/ansible/become.html#becoming-an-unprivileged-user
+# for more secure ways to fix this than enabling this option.
+#allow_world_readable_tmpfiles = False
+
+# controls the compression level of variables sent to
+# worker processes. At the default of 0, no compression
+# is used. This value must be an integer from 0 to 9.
+#var_compression_level = 9
+
+# controls what compression method is used for new-style ansible modules when
+# they are sent to the remote system.  The compression types depend on having
+# support compiled into both the controller's python and the client's python.
+# The names should match with the python Zipfile compression types:
+# * ZIP_STORED (no compression. available everywhere)
+# * ZIP_DEFLATED (uses zlib, the default)
+# These values may be set per host via the ansible_module_compression inventory
+# variable
+#module_compression = 'ZIP_DEFLATED'
+
+# This controls the cutoff point (in bytes) on --diff for files
+# set to 0 for unlimited (RAM may suffer!).
+#max_diff_size = 1048576
+
+# This controls how ansible handles multiple --tags and --skip-tags arguments
+# on the CLI.  If this is True then multiple arguments are merged together.  If
+# it is False, then the last specified argument is used and the others are ignored.
+# This option will be removed in 2.8.
+#merge_multiple_cli_flags = True
+
+# Controls showing custom stats at the end, off by default
+#show_custom_stats = True
+
+# Controls which files to ignore when using a directory as inventory with
+# possibly multiple sources (both static and dynamic)
+#inventory_ignore_extensions = ~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo
+
+# This family of modules use an alternative execution path optimized for network appliances
+# only update this setting if you know how this works, otherwise it can break module execution
+#network_group_modules=eos, nxos, ios, iosxr, junos, vyos
+
+# When enabled, this option allows lookups (via variables like {{lookup('foo')}} or when used as
+# a loop with `with_foo`) to return data that is not marked "unsafe". This means the data may contain
+# jinja2 templating language which will be run through the templating engine.
+# ENABLING THIS COULD BE A SECURITY RISK
+#allow_unsafe_lookups = False
+
+# set default errors for all plays
+#any_errors_fatal = False
+
+[inventory]
+# enable inventory plugins, default: 'host_list', 'script', 'yaml', 'ini', 'auto'
+#enable_plugins = host_list, virtualbox, yaml, constructed
+
+# ignore these extensions when parsing a directory as inventory source
+#ignore_extensions = .pyc, .pyo, .swp, .bak, ~, .rpm, .md, .txt, ~, .orig, .ini, .cfg, .retry
+
+# ignore files matching these patterns when parsing a directory as inventory source
+#ignore_patterns=
+
+# If 'true' unparsed inventory sources become fatal errors, they are warnings otherwise.
+#unparsed_is_failed=False
+
+[privilege_escalation]
+#become=True
+#become_method=sudo
+#become_user=root
+#become_ask_pass=False
+
+[paramiko_connection]
+
+# uncomment this line to cause the paramiko connection plugin to not record new host
+# keys encountered.  Increases performance on new host additions.  Setting works independently of the
+# host key checking setting above.
+#record_host_keys=False
+
+# by default, Ansible requests a pseudo-terminal for commands executed under sudo. Uncomment this
+# line to disable this behaviour.
+#pty=False
+
+# paramiko will default to looking for SSH keys initially when trying to
+# authenticate to remote devices.  This is a problem for some network devices
+# that close the connection after a key failure.  Uncomment this line to
+# disable the Paramiko look for keys function
+#look_for_keys = False
+
+# When using persistent connections with Paramiko, the connection runs in a
+# background process.  If the host doesn't already have a valid SSH key, by
+# default Ansible will prompt to add the host key.  This will cause connections
+# running in background processes to fail.  Uncomment this line to have
+# Paramiko automatically add host keys.
+#host_key_auto_add = True
+
+[ssh_connection]
+
+# ssh arguments to use
+# Leaving off ControlPersist will result in poor performance, so use
+# paramiko on older platforms rather than removing it, -C controls compression use
+#ssh_args = -C -o ControlMaster=auto -o ControlPersist=60s
+
+# The base directory for the ControlPath sockets.
+# This is the "%(directory)s" in the control_path option
+#
+# Example:
+# control_path_dir = /tmp/.ansible/cp
+#control_path_dir = ~/.ansible/cp
+
+# The path to use for the ControlPath sockets. This defaults to a hashed string of the hostname,
+# port and username (empty string in the config). The hash mitigates a common problem users
+# found with long hostames and the conventional %(directory)s/ansible-ssh-%%h-%%p-%%r format.
+# In those cases, a "too long for Unix domain socket" ssh error would occur.
+#
+# Example:
+# control_path = %(directory)s/%%h-%%r
+#control_path =
+
+# Enabling pipelining reduces the number of SSH operations required to
+# execute a module on the remote server. This can result in a significant
+# performance improvement when enabled, however when using "sudo:" you must
+# first disable 'requiretty' in /etc/sudoers
+#
+# By default, this option is disabled to preserve compatibility with
+# sudoers configurations that have requiretty (the default on many distros).
+#
+#pipelining = False
+
+# Control the mechanism for transferring files (old)
+#   * smart = try sftp and then try scp [default]
+#   * True = use scp only
+#   * False = use sftp only
+#scp_if_ssh = smart
+
+# Control the mechanism for transferring files (new)
+# If set, this will override the scp_if_ssh option
+#   * sftp  = use sftp to transfer files
+#   * scp   = use scp to transfer files
+#   * piped = use 'dd' over SSH to transfer files
+#   * smart = try sftp, scp, and piped, in that order [default]
+#transfer_method = smart
+
+# if False, sftp will not use batch mode to transfer files. This may cause some
+# types of file transfer failures impossible to catch however, and should
+# only be disabled if your sftp version has problems with batch mode
+#sftp_batch_mode = False
+
+# The -tt argument is passed to ssh when pipelining is not enabled because sudo 
+# requires a tty by default. 
+#use_tty = True
+
+# Number of times to retry an SSH connection to a host, in case of UNREACHABLE.
+# For each retry attempt, there is an exponential backoff,
+# so after the first attempt there is 1s wait, then 2s, 4s etc. up to 30s (max).
+#retries = 3
+
+[persistent_connection]
+
+# Configures the persistent connection timeout value in seconds.  This value is
+# how long the persistent connection will remain idle before it is destroyed.
+# If the connection doesn't receive a request before the timeout value
+# expires, the connection is shutdown. The default value is 30 seconds.
+#connect_timeout = 30
+
+# Configures the persistent connection retry timeout.  This value configures the
+# the retry timeout that ansible-connection will wait to connect
+# to the local domain socket. This value must be larger than the
+# ssh timeout (timeout) and less than persistent connection idle timeout (connect_timeout).
+# The default value is 15 seconds.
+#connect_retry_timeout = 15
+
+# The command timeout value defines the amount of time to wait for a command
+# or RPC call before timing out. The value for the command timeout must
+# be less than the value of the persistent connection idle timeout (connect_timeout)
+# The default value is 10 second.
+#command_timeout = 10
+
+[accelerate]
+#accelerate_port = 5099
+#accelerate_timeout = 30
+#accelerate_connect_timeout = 5.0
+
+# The daemon timeout is measured in minutes. This time is measured
+# from the last activity to the accelerate daemon.
+#accelerate_daemon_timeout = 30
+
+# If set to yes, accelerate_multi_key will allow multiple
+# private keys to be uploaded to it, though each user must
+# have access to the system via SSH to add a new key. The default
+# is "no".
+#accelerate_multi_key = yes
+
+[selinux]
+# file systems that require special treatment when dealing with security context
+# the default behaviour that copies the existing context or uses the user default
+# needs to be changed to use the file system dependent context.
+#special_context_filesystems=nfs,vboxsf,fuse,ramfs,9p
+
+# Set this to yes to allow libvirt_lxc connections to work without SELinux.
+#libvirt_lxc_noseclabel = yes
+
+[colors]
+#highlight = white
+#verbose = blue
+#warn = bright purple
+#error = red
+#debug = dark gray
+#deprecate = purple
+#skip = cyan
+#unreachable = red
+#ok = green
+#changed = yellow
+#diff_add = green
+#diff_remove = red
+#diff_lines = cyan
+
+
+[diff]
+# Always print diff when running ( same as always running with -D/--diff )
+# always = no
+
+# Set how many context lines to show in diff
+# context = 3
+[vbronsht-redhat.com@bastion ~]$ cat /etc/ansible/
+ansible.cfg  hosts        roles/       
+[vbronsht-redhat.com@bastion ~]$ cat /etc/ansible/hosts 
+#
+# ansible inventory for OpenShift Container Platform  3.11.59
+# AgnosticD ansible-config: ocp-ha-disconnected-lab
+
+[OSEv3:vars]
+
+###########################################################################
+### Ansible Vars
+###########################################################################
+timeout=60
+ansible_user=ec2-user
+ansible_become=yes
+
+###########################################################################
+### OpenShift Basic Vars
+###########################################################################
+
+openshift_deployment_type=openshift-enterprise
+
+openshift_disable_check="disk_availability,memory_availability,docker_image_availability"
+
+# OpenShift Version:
+# If you modify the openshift_image_tag or the openshift_pkg_version variables after the cluster is set up, then an upgrade can be triggered, resulting in downtime.
+# If openshift_image_tag is set, its value is used for all hosts in system container environments, even those that have another version installed. If
+# Use this variable to specify a container image tag to install or configure.
+#openshift_pkg_version is set, its value is used for all hosts in RPM-based environments, even those that have another version installed.
+openshift_image_tag=v3.11.59
+# Use this variable to specify an RPM version to install or configure.
+openshift_pkg_version=-3.11.59
+openshift_release=3.11.59
+
+
+# Node Groups
+openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true','runtime=docker']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true','runtime=docker']}, {'name': 'node-config-compute', 'labels': ['node-role.kubernetes.io/compute=true','runtime=docker'], 'edits': [{ 'key': 'kubeletArguments.pods-per-core','value': ['20']}]}]
+# Configure node kubelet arguments. pods-per-core is valid in OpenShift Origin 1.3 or OpenShift Container Platform 3.3 and later. -> These  need to go into the above
+# openshift_node_kubelet_args={'pods-per-core': ['10'], 'max-pods': ['250'], 'image-gc-high-threshold': ['85'], 'image-gc-low-threshold': ['75']}
+
+# Configure logrotate scripts
+# See: https://github.com/nickhammond/ansible-logrotate
+logrotate_scripts=[{"name": "syslog", "path": "/var/log/cron\n/var/log/maillog\n/var/log/messages\n/var/log/secure\n/var/log/spooler\n", "options": ["daily", "rotate 7","size 500M", "compress", "sharedscripts", "missingok"], "scripts": {"postrotate": "/bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true"}}]
+
+# Deploy Operator Lifecycle Manager Tech Preview
+openshift_enable_olm=false
+
+###########################################################################
+### OpenShift Registries Locations
+###########################################################################
+
+#oreg_url=registry.access.redhat.com/openshift3/ose-${component}:${version}
+oreg_url=isolated1.1e3b.internal:5000/openshift3/ose-${component}:${version}
+openshift_docker_additional_registries=isolated1.1e3b.internal:5000
+openshift_docker_insecure_registries=isolated1.1e3b.internal:5000
+openshift_docker_blocked_registries=registry.redhat.io,registry.access.redhat.com,docker.io
+#oreg_auth_user=
+#oreg_auth_password=
+
+# For Operator Framework Images
+#openshift_additional_registry_credentials=[{'host':'registry.connect.redhat.com','user':'11521502|muc1904','password':'eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiI3OTIwMjhjZWQwYTM0YmQxODUyNTQ5MTFjYzRiZWZiNSJ9.Jy8Q37z0i2kjXTRo1kKNGbHr2V1ZGQAM-KEbO_noOwTWsA9l19iYeDiIgqOiQHfENFIMPT9cYT9Mi0yb96UmTwMk0TLsEJkmJmwCc7FmeegCjUaiM-EpS7sU_-Z5ZUJl_RZid76pqvcxQVVNi-L4N49_YwmCpUln7N27V_3jK5YVw36bi48GafgF9Dt9ruW4b8cuiwEePddIC-xUP3QN_-8vUWhWiT2EeAL0qayy_XuSqg99Qh79XmnEX6fAbYlFDLzsDPuqTOltYvzF26_mgx9nFbR1bvBImI54WBis-00vfcz1EV4tzuKcO4HlJxUxZ89Sob6zYcPLE3BnCRiUfQzspDqyOEwoat7y-o5BVx_yzBzc8WS67lYXYHWk0TR7ycGtPvracGacJCc2VN_iSfHU6Ad6iA2C4yTL5sb4yP8Rm8-PE_HmQ-B5holBqRYg49EV70QKg60pjbtAUtAfO0mBhX9iqWuBETuuPaDUwJ2-sTh0odZJFwsiBu7cvWXTsF5DSNvVYTodzwqcRTgcTQ8QbEFWGL-GBRVdli-8kYZgSZFhPVABV-SG0aQ3q4n3XfBBP-9irnSK4wRe4b4Pt0PQYq9VTPeddV4qAG9GGTlQVvV0rE1XoiowQS3qmIorah67XzxVU0_VTxUXxe3vF_UcQlln6Y-9x_U6qZ9P_-w','test_image':'mongodb/enterprise-operator:0.3.2'}]
+
+openshift_examples_modify_imagestreams=true
+
+
+# Set this line to enable NFS
+openshift_enable_unsupported_configurations=true
+
+###########################################################################
+### OpenShift Master Vars
+###########################################################################
+
+openshift_master_api_port=443
+openshift_master_console_port=443
+
+#Default:  openshift_master_cluster_method=native
+openshift_master_cluster_hostname=loadbalancer.1e3b.internal
+openshift_master_cluster_public_hostname=loadbalancer.1e3b.example.opentlc.com
+openshift_master_default_subdomain=apps.1e3b.example.opentlc.com
+#openshift_master_ca_certificate=
+openshift_master_overwrite_named_certificates=True
+
+# Audit log
+# openshift_master_audit_config={"enabled": true, "auditFilePath": "/var/log/openpaas-oscp-audit/openpaas-oscp-audit.log", "maximumFileRetentionDays": 14, "maximumFileSizeMegabytes": 500, "maximumRetainedFiles": 5}
+
+# ocp-ha-lab
+# AWS Autoscaler
+#openshift_master_bootstrap_auto_approve=false
+# This variable is a cluster identifier unique to the AWS Availability Zone. Using this avoids potential issues in Amazon Web Services (AWS) with multiple zones or multiple clusters.
+#openshift_clusterid
+
+###########################################################################
+### OpenShift Network Vars
+###########################################################################
+
+osm_cluster_network_cidr=10.1.0.0/16
+openshift_portal_net=172.30.0.0/16
+
+# os_sdn_network_plugin_name='redhat/openshift-ovs-networkpolicy'
+os_sdn_network_plugin_name='redhat/openshift-ovs-networkpolicy'
+
+###########################################################################
+### OpenShift Authentication Vars
+###########################################################################
+
+
+# LDAP AND HTPASSWD Authentication (download ipa-ca.crt first)
+#openshift_master_identity_providers=
+
+# Just LDAP
+#openshift_master_identity_providers=[{'name': 'ldap', 'challenge': 'true', 'login': 'true', 'kind': 'LDAPPasswordIdentityProvider','attributes': {'id': ['dn'], 'email': ['mail'], 'name': ['cn'], 'preferredUsername': ['uid']}, 'bindDN': 'uid=admin,cn=users,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com', 'bindPassword': 'r3dh4t1!', 'ca': '/etc/origin/master/ipa-ca.crt','insecure': 'false', 'url': 'ldaps://ipa.shared.example.opentlc.com:636/cn=users,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,dc=shared,dc=example,dc=opentlc,dc=com)'}]
+
+# Just HTPASSWD
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+
+# LDAP and HTPASSWD dependencies
+
+openshift_master_htpasswd_file=/root/htpasswd.openshift
+#openshift_master_ldap_ca_file=/root/ipa-ca.crt
+
+
+###########################################################################
+### OpenShift Metrics and Logging Vars
+###########################################################################
+
+#########################
+# Prometheus Metrics
+#########################
+
+openshift_hosted_prometheus_deploy=true
+openshift_prometheus_namespace=openshift-metrics
+openshift_prometheus_node_selector={"node-role.kubernetes.io/infra":"true"}
+
+openshift_cluster_monitoring_operator_install=true
+
+
+########################
+# Cluster Metrics
+########################
+
+openshift_metrics_install_metrics=true
+
+openshift_metrics_storage_kind=nfs
+openshift_metrics_storage_access_modes=['ReadWriteOnce']
+openshift_metrics_storage_nfs_directory=/srv/nfs
+openshift_metrics_storage_nfs_options='*(rw,root_squash)'
+openshift_metrics_storage_volume_name=metrics
+openshift_metrics_storage_volume_size=10Gi
+openshift_metrics_storage_labels={'storage': 'metrics'}
+openshift_metrics_cassandra_pvc_storage_class_name=''
+
+
+openshift_metrics_hawkular_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_metrics_cassandra_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_metrics_heapster_nodeselector={"node-role.kubernetes.io/infra": "true"}
+
+# Store Metrics for 2 days
+openshift_metrics_duration=2
+
+# Suggested Quotas and limits for Prometheus components:
+openshift_prometheus_memory_requests=2Gi
+openshift_prometheus_cpu_requests=750m
+openshift_prometheus_memory_limit=2Gi
+openshift_prometheus_cpu_limit=750m
+openshift_prometheus_alertmanager_memory_requests=300Mi
+openshift_prometheus_alertmanager_cpu_requests=200m
+openshift_prometheus_alertmanager_memory_limit=300Mi
+openshift_prometheus_alertmanager_cpu_limit=200m
+openshift_prometheus_alertbuffer_memory_requests=300Mi
+openshift_prometheus_alertbuffer_cpu_requests=200m
+openshift_prometheus_alertbuffer_memory_limit=300Mi
+openshift_prometheus_alertbuffer_cpu_limit=200m
+
+
+# Grafana
+openshift_grafana_node_selector={"node-role.kubernetes.io/infra":"true"}
+openshift_grafana_storage_type=pvs
+openshift_grafana_pvc_size=2Gi
+openshift_grafana_node_exporter=true
+
+########################
+# Cluster Logging
+########################
+
+openshift_logging_install_logging=True
+openshift_logging_install_eventrouter=True
+
+openshift_logging_storage_kind=nfs
+openshift_logging_storage_access_modes=['ReadWriteOnce']
+openshift_logging_storage_nfs_directory=/srv/nfs
+openshift_logging_storage_nfs_options='*(rw,root_squash)'
+openshift_logging_storage_volume_name=logging
+openshift_logging_storage_volume_size=10Gi
+openshift_logging_storage_labels={'storage': 'logging'}
+openshift_logging_es_pvc_storage_class_name=''
+openshift_logging_es_memory_limit=8Gi
+openshift_logging_es_cluster_size=1
+openshift_logging_curator_default_days=2
+
+openshift_logging_kibana_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_logging_curator_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra": "true"}
+openshift_logging_eventrouter_nodeselector={"node-role.kubernetes.io/infra": "true"}
+
+###########################################################################
+### OpenShift Router and Registry Vars
+###########################################################################
+
+# default selectors for router and registry services
+# openshift_router_selector='node-role.kubernetes.io/infra=true'
+# openshift_registry_selector='node-role.kubernetes.io/infra=true'
+
+openshift_hosted_router_replicas=2
+
+# openshift_hosted_router_certificate={"certfile": "/path/to/router.crt", "keyfile": "/path/to/router.key", "cafile": "/path/to/router-ca.crt"}
+
+openshift_hosted_registry_replicas=1
+openshift_hosted_registry_pullthrough=true
+openshift_hosted_registry_acceptschema2=true
+openshift_hosted_registry_enforcequota=true
+
+
+openshift_hosted_registry_storage_kind=nfs
+openshift_hosted_registry_storage_access_modes=['ReadWriteMany']
+openshift_hosted_registry_storage_nfs_directory=/srv/nfs
+openshift_hosted_registry_storage_nfs_options='*(rw,root_squash)'
+openshift_hosted_registry_storage_volume_name=registry
+openshift_hosted_registry_storage_volume_size=20Gi
+
+###########################################################################
+### OpenShift Service Catalog Vars
+###########################################################################
+
+# default=true
+openshift_enable_service_catalog=true
+
+# default=true
+template_service_broker_install=true
+openshift_template_service_broker_namespaces=['openshift']
+
+# default=true
+ansible_service_broker_install=true
+ansible_service_broker_local_registry_whitelist=['.*-apb$']
+
+###########################################################################
+### OpenShift Hosts
+###########################################################################
+# openshift_node_labels DEPRECATED
+# openshift_node_problem_detector_install
+
+[OSEv3:children]
+lb
+masters
+etcd
+nodes
+nfs
+
+[lb]
+loadbalancer.1e3b.internal
+
+[masters]
+master1.1e3b.internal
+master2.1e3b.internal
+master3.1e3b.internal
+
+[etcd]
+master1.1e3b.internal
+master2.1e3b.internal
+master3.1e3b.internal
+
+[nodes]
+## These are the masters
+master1.1e3b.internal openshift_node_group_name='node-config-master' openshift_node_problem_detector_install=true
+master2.1e3b.internal openshift_node_group_name='node-config-master' openshift_node_problem_detector_install=true
+master3.1e3b.internal openshift_node_group_name='node-config-master' openshift_node_problem_detector_install=true
+
+## These are infranodes
+infranode1.1e3b.internal openshift_node_group_name='node-config-infra' openshift_node_problem_detector_install=true
+infranode2.1e3b.internal openshift_node_group_name='node-config-infra' openshift_node_problem_detector_install=true
+
+## These are regular nodes
+node1.1e3b.internal openshift_node_group_name='node-config-compute' openshift_node_problem_detector_install=true
+node2.1e3b.internal openshift_node_group_name='node-config-compute' openshift_node_problem_detector_install=true
+
+
+[nfs]
+support1.1e3b.internal
